@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ import com.example.pst_carro.R;
 public class control extends AppCompatActivity {
 
     //1)
-    Button IdEncender, IdApagar,IdDesconectar, IdDetener, IdDerecha, IdIzquierda;
+    Button avanzar, retroceder, derecha, izquierda;
     TextView IdBufferIn;
     //-------------------------------------------
     Handler bluetoothIn;
@@ -43,13 +44,11 @@ public class control extends AppCompatActivity {
         setContentView(R.layout.activity_control);
         //2)
         //Enlaza los controles con sus respectivas vistas
-        IdEncender = (Button) findViewById(R.id.encender);
-        IdApagar = (Button) findViewById(R.id.apagar);
-        IdDesconectar = (Button) findViewById(R.id.desconectar);
         IdBufferIn = (TextView) findViewById(R.id.datos);
-        IdDetener = (Button) findViewById(R.id.detener);
-        IdDerecha = (Button) findViewById(R.id.derecha);
-        IdIzquierda = (Button) findViewById(R.id.izquierda);
+        avanzar = (Button) findViewById(R.id.avanzar);
+        retroceder = (Button) findViewById(R.id.retroceder);
+        derecha = (Button) findViewById(R.id.derecha);
+        izquierda = (Button) findViewById(R.id.izquierda);
 
         bluetoothIn = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -61,7 +60,7 @@ public class control extends AppCompatActivity {
 
                     if (endOfLineIndex > 0) {
                         String dataInPrint = DataStringIN.substring(0, endOfLineIndex);
-                        IdBufferIn.setText("ACCION: " + dataInPrint);//<-<- PARTE A MODIFICAR >->->
+                        IdBufferIn.setText("Peso de carga actual: " + dataInPrint);//<-<- PARTE A MODIFICAR >->->
                         DataStringIN.delete(0, DataStringIN.length());
                     }
                 }
@@ -74,49 +73,67 @@ public class control extends AppCompatActivity {
         // Configuracion onClick listeners para los botones
         // para indicar que se realizara cuando se detecte
         // el evento de Click
-        IdApagar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                MyConexionBT.write("0");
-            }
-        });
 
-        IdEncender.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
-                MyConexionBT.write("1");
-            }
-        });
-
-        IdDetener.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                MyConexionBT.write("2");
-            }
-        });
-
-        IdDerecha.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                MyConexionBT.write("3");
-            }
-        });
-
-        IdIzquierda.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                MyConexionBT.write("4");
-            }
-        });
-
-
-        IdDesconectar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (btSocket!=null)
-                {
-                    try {btSocket.close();}
-                    catch (IOException e)
-                    { Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_SHORT).show();;}
+        avanzar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction()==MotionEvent.ACTION_BUTTON_PRESS){
+                    MyConexionBT.write("A");
+                    return true;
                 }
-                finish();
+                if (event.getAction()==MotionEvent.ACTION_BUTTON_RELEASE){
+                    MyConexionBT.write("S");
+                    return true;
+                }
+                return false;
             }
         });
+
+        retroceder.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction()==MotionEvent.ACTION_BUTTON_PRESS){
+                    MyConexionBT.write("R");
+                    return true;
+                }
+                if (event.getAction()==MotionEvent.ACTION_BUTTON_RELEASE){
+                    MyConexionBT.write("S");
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        derecha.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction()==MotionEvent.ACTION_BUTTON_PRESS){
+                    MyConexionBT.write("D");
+                    return true;
+                }
+                if (event.getAction()==MotionEvent.ACTION_BUTTON_RELEASE){
+                    MyConexionBT.write("S");
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        izquierda.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction()==MotionEvent.ACTION_BUTTON_PRESS){
+                    MyConexionBT.write("I");
+                    return true;
+                }
+                if (event.getAction()==MotionEvent.ACTION_BUTTON_RELEASE){
+                    MyConexionBT.write("S");
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException

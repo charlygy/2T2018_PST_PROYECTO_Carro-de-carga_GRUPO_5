@@ -115,6 +115,18 @@ public class carga extends AppCompatActivity {
             }
         }
         // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+
+            JSONArray ja = null;
+            try {
+                ja = new JSONArray(result);
+                pesoLimite = Double.parseDouble(ja.getString(0));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
 
     }
 
