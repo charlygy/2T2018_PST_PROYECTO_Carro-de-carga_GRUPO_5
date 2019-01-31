@@ -1,6 +1,5 @@
 package com.example.pst_carro;
 
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -36,6 +35,7 @@ public class control extends AppCompatActivity {
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     // String para la direccion MAC
     private static String address = null;
+    public double pesoLimite = 120;
     //-------------------------------------------
 
     @Override
@@ -52,6 +52,7 @@ public class control extends AppCompatActivity {
 
         bluetoothIn = new Handler() {
             public void handleMessage(android.os.Message msg) {
+                Double pesoActual = 0.00;
                 if (msg.what == handlerState) {
                     String readMessage = (String) msg.obj;
                     DataStringIN.append(readMessage);
@@ -61,11 +62,16 @@ public class control extends AppCompatActivity {
                     if (endOfLineIndex > 0) {
                         String dataInPrint = DataStringIN.substring(0, endOfLineIndex);
                         IdBufferIn.setText("Peso de carga actual: " + dataInPrint);//<-<- PARTE A MODIFICAR >->->
+                        pesoActual=Double.parseDouble(dataInPrint);
+                        if (pesoActual>pesoLimite){
+                            Toast.makeText(control.this,"Peso limite superado, descargue el carro",Toast.LENGTH_LONG).show();
+                        }
                         DataStringIN.delete(0, DataStringIN.length());
                     }
                 }
             }
         };
+
 
         btAdapter = BluetoothAdapter.getDefaultAdapter(); // get Bluetooth adapter
         VerificarEstadoBT();

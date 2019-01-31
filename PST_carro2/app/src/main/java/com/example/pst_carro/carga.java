@@ -2,16 +2,20 @@ package com.example.pst_carro;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,60 +24,57 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
-public class login extends AppCompatActivity {
 
-    EditText editTextUser;
-    EditText editTextPassword;
-    Button buttonLogin;
-    String user = "defaultuser";
-    String password = "defaultpassword";
+public class carga extends AppCompatActivity {
+
+    ArrayAdapter mArrayAdapter;
+    ListView listView;
+    TextView textViewPeso, textViewLista;
+    Button buttonReiniciarLista, buttonCargar;
+    double pesoLimite = 120;
+    double pesoCarga = 0;
+    String id_usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_carga);
 
-        editTextUser = (EditText) findViewById(R.id.editTextUser);
-        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        buttonLogin = (Button) findViewById(R.id.buttonLogin);
+        listView = (ListView) findViewById(R.id.listView);
+        textViewPeso = (TextView) findViewById(R.id.textViewPeso);
+        textViewLista = (TextView) findViewById(R.id.textViewLista);
+        buttonCargar = (Button) findViewById(R.id.buttonCargar);
+        buttonCargar.setEnabled(true);
+        buttonReiniciarLista = (Button) findViewById(R.id.buttonReiniciarLista);
+        mArrayAdapter = new ArrayAdapter(this,R.layout.textviewlayout);
+        listView.setAdapter(mArrayAdapter);
 
+        Bundle bundle = getIntent().getExtras();
+        id_usuario = bundle.getString("id_usuario");
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+        new consultarItems().execute("http://172.20.141.9/consultar_item.php?id_usuario="+id_usuario);
+
+        buttonCargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                new loginApp().execute("http://172.18.32.88/login.php?id_usuario="+editTextUser.getText().toString());
-
-
-                if (editTextUser.getText().toString().equals(user)){
-                    if (editTextPassword.getText().toString().equals(password)){
-                        Intent i = new Intent(login.this,carga.class);
-                        i.putExtra("id_usuario",user);
-                        startActivity(i);
-                        editTextUser.setText("");
-                        editTextPassword.setText("");
-                        user = "defaultuser";
-                        password = "defaultpassword";
-                        finish();
-
-                    }else{
-                        editTextUser.setText("");
-                        editTextPassword.setText("");
-                        Toast.makeText(login.this,"Credenciales no validas",Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-                    editTextUser.setText("");
-                    editTextPassword.setText("");
-                    Toast.makeText(login.this,"Credenciales no validas",Toast.LENGTH_SHORT).show();
-                }
+                Intent i = new Intent(carga.this,bluetooth.class);
+                startActivity(i);
             }
         });
 
+        buttonReiniciarLista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(carga.this,"Lista Reiniciada",Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
-    private class loginApp extends AsyncTask<String, Void, String> {
+
+    private class consultarItems extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
 
@@ -89,10 +90,17 @@ public class login extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             JSONArray ja = null;
+            String[] token;
+            String[] token2;
+            int length = result.length();
+            int i;
+            token=result.split("]");
             try {
-                ja = new JSONArray(result);
-                user = ja.getString(0);
-                password = ja.getString(1);
+                for (i=0;i<length;i++){
+                    token2=token[i].replace("[","").replace("\"","").split(",");
+                    ja = new JSONArray(token2);
+                    mArrayAdapter.add(ja.getString(0) + "\n" + ja.getString(1));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -141,6 +149,4 @@ public class login extends AppCompatActivity {
         reader.read(buffer);
         return new String(buffer);
     }
-
-
 }

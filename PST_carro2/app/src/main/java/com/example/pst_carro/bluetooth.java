@@ -1,9 +1,10 @@
 package com.example.pst_carro;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.pst_carro.R;
 
 import java.util.Set;
 
@@ -56,7 +56,7 @@ public class bluetooth extends AppCompatActivity {
         //------------------------------------------------------------------------------
 
         // Obtiene un conjunto de dispositivos actualmente emparejados y agregua a 'pairedDevices'
-        Set <BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
+        Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
         // Adiciona un dispositivos previo emparejado al array
         if (pairedDevices.size() > 0)
