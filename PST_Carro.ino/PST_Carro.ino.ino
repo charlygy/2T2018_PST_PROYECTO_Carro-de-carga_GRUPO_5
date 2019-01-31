@@ -54,7 +54,7 @@ void loop(){
         char VarChar; 
         VarChar = ModBluetooth.read(); 
                  
-        if(VarChar == 'R'){ 
+        if(VarChar == '0'){ 
           digitalWrite(pinLed, HIGH); 
           delay(100); 
           ModBluetooth.print("RETROCEDIENDO"); 
@@ -62,7 +62,7 @@ void loop(){
           ModBluetooth.print("#");
           move(backward, 80); 
         }
-        if(VarChar == 'A') { 
+        if(VarChar == '1') { 
           digitalWrite(pinLed, HIGH); 
           delay(100); 
           ModBluetooth.print("AVANZANDO"); 
@@ -70,7 +70,7 @@ void loop(){
           ModBluetooth.print("#");
           move(forward, 80);
         }
-        if(VarChar == 'S') { 
+        if(VarChar == '2') { 
           digitalWrite(pinLed, LOW); 
           delay(100); 
           ModBluetooth.print("DETENIDO"); 
@@ -78,7 +78,7 @@ void loop(){
           ModBluetooth.print("#");
           fullStop();
         }
-        if(VarChar == 'D') { 
+        if(VarChar == '3') { 
           digitalWrite(pinLed, LOW); 
           delay(100); 
           ModBluetooth.print("DERECHA"); 
@@ -86,7 +86,7 @@ void loop(){
           ModBluetooth.print("#");
           turn(forward,40);
         }
-        if(VarChar == 'I') { 
+        if(VarChar == '4') { 
           digitalWrite(pinLed, LOW); 
           delay(100); 
           ModBluetooth.print("IZQUIERDA"); 

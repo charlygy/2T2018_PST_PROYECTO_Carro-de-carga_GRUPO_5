@@ -52,7 +52,7 @@ public class control extends AppCompatActivity {
 
         bluetoothIn = new Handler() {
             public void handleMessage(android.os.Message msg) {
-                Double pesoActual = 0.00;
+                //Double pesoActual = 0.00;
                 if (msg.what == handlerState) {
                     String readMessage = (String) msg.obj;
                     DataStringIN.append(readMessage);
@@ -62,10 +62,10 @@ public class control extends AppCompatActivity {
                     if (endOfLineIndex > 0) {
                         String dataInPrint = DataStringIN.substring(0, endOfLineIndex);
                         IdBufferIn.setText("Peso de carga actual: " + dataInPrint);//<-<- PARTE A MODIFICAR >->->
-                        pesoActual=Double.parseDouble(dataInPrint);
-                        if (pesoActual>pesoLimite){
-                            Toast.makeText(control.this,"Peso limite superado, descargue el carro",Toast.LENGTH_LONG).show();
-                        }
+                        //pesoActual=Double.parseDouble(dataInPrint);
+                        //if (pesoActual>pesoLimite){
+                         //   Toast.makeText(control.this,"Peso limite superado, descargue el carro",Toast.LENGTH_LONG).show();
+                        //}
                         DataStringIN.delete(0, DataStringIN.length());
                     }
                 }
@@ -83,12 +83,12 @@ public class control extends AppCompatActivity {
         avanzar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction()==MotionEvent.ACTION_BUTTON_PRESS){
-                    MyConexionBT.write("A");
+                if (event.getAction()==MotionEvent.ACTION_DOWN){
+                    MyConexionBT.write("1");
                     return true;
                 }
-                if (event.getAction()==MotionEvent.ACTION_BUTTON_RELEASE){
-                    MyConexionBT.write("S");
+                if (event.getAction()==MotionEvent.ACTION_UP){
+                    MyConexionBT.write("2");
                     return true;
                 }
                 return false;
@@ -98,12 +98,12 @@ public class control extends AppCompatActivity {
         retroceder.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction()==MotionEvent.ACTION_BUTTON_PRESS){
-                    MyConexionBT.write("R");
+                if (event.getAction()==MotionEvent.ACTION_DOWN){
+                    MyConexionBT.write("0");
                     return true;
                 }
-                if (event.getAction()==MotionEvent.ACTION_BUTTON_RELEASE){
-                    MyConexionBT.write("S");
+                if (event.getAction()==MotionEvent.ACTION_UP){
+                    MyConexionBT.write("2");
                     return true;
                 }
                 return false;
@@ -113,12 +113,12 @@ public class control extends AppCompatActivity {
         derecha.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction()==MotionEvent.ACTION_BUTTON_PRESS){
-                    MyConexionBT.write("D");
+                if (event.getAction()==MotionEvent.ACTION_DOWN){
+                    MyConexionBT.write("3");
                     return true;
                 }
-                if (event.getAction()==MotionEvent.ACTION_BUTTON_RELEASE){
-                    MyConexionBT.write("S");
+                if (event.getAction()==MotionEvent.ACTION_UP){
+                    MyConexionBT.write("2");
                     return true;
                 }
                 return false;
@@ -128,12 +128,12 @@ public class control extends AppCompatActivity {
         izquierda.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction()==MotionEvent.ACTION_BUTTON_PRESS){
-                    MyConexionBT.write("I");
+                if (event.getAction()==MotionEvent.ACTION_DOWN){
+                    MyConexionBT.write("4");
                     return true;
                 }
-                if (event.getAction()==MotionEvent.ACTION_BUTTON_RELEASE){
-                    MyConexionBT.write("S");
+                if (event.getAction()==MotionEvent.ACTION_UP){
+                    MyConexionBT.write("2");
                     return true;
                 }
                 return false;
